@@ -1,0 +1,4 @@
+class RayTrace {
+    constructor (options) {
+    }
+}
