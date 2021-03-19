@@ -60,6 +60,10 @@ var Sphere = function(center, radius, color) {
   this.color = color;
 }
 
+function getSpheres () {
+  return spheres;
+}
+
 // Scene setup.
 var viewport_size = 1;
 var projection_plane_z = 1;
@@ -67,7 +71,7 @@ var camera_position = [0, 0, 0];
 var background_color = [255, 255, 255];
 var spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0]),
            new Sphere([2, 0, 4], 1, [0, 0, 255]),
-           new Sphere([-2, 0, 4], 1, [0, 255, 0])];
+           new Sphere([-2, 0, 4], 1.5, [0, 0, 0])];
 
 
 // Converts 2D canvas coordinates to 3D viewport coordinates.
@@ -102,7 +106,7 @@ var IntersectRaySphere = function(origin, direction, sphere) {
 var TraceRay = function(origin, direction, min_t, max_t) {
   var closest_t = Infinity;
   var closest_sphere = null;
-
+  let spheres = getSpheres();
   for (var i = 0; i < spheres.length; i++) {
     var ts = IntersectRaySphere(origin, direction, spheres[i]);
     if (ts[0] < closest_t && min_t < ts[0] && ts[0] < max_t) {
@@ -126,14 +130,20 @@ var TraceRay = function(origin, direction, min_t, max_t) {
 //
 // Main loop.
 //
-for (var x = -canvas.width/2; x < canvas.width/2; x++) {
-  for (var y = -canvas.height/2; y < canvas.height/2; y++) {
-    var direction = CanvasToViewport([x, y])
-    var color = TraceRay(camera_position, direction, 1, Infinity);
-    PutPixel(x, y, color);
+setInterval(Main, 1);
+
+function Main () {
+  for (var x = -canvas.width/2; x < canvas.width/2; x++) {
+    for (var y = -canvas.height/2; y < canvas.height/2; y++) {
+      var direction = CanvasToViewport([x, y])
+      var color = TraceRay(camera_position, direction, 1, Infinity);
+      PutPixel(x, y, color);
+    }
   }
+  spheres[0].center[2] += 0.2;
+  UpdateCanvas();
 }
 
-UpdateCanvas();
+
 
 
