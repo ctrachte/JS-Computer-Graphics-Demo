@@ -140,7 +140,7 @@ function Main () {
       PutPixel(x, y, color);
     }
   }
-  spheres[0].center[2] += 0.2;
+  spheres[0].center[1] += 0.2*(-1);
   UpdateCanvas();
 }
 
