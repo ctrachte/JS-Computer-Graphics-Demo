@@ -128,7 +128,7 @@ const TraceRay = function (origin, direction, min_t, max_t) {
 
 
 //
-// Main loop.
+// Main loop, uncomment for automatic movement of sphere
 //
 // setInterval(Main, 1);
 
@@ -143,8 +143,10 @@ function Main() {
   UpdateCanvas();
 }
 
+//draws initial canvas
 Main();
 
+// keypress listener for red sphere movement. 
 window.addEventListener("keyup", function (e) {
   let keypress = e.key;
   switch (keypress) {
