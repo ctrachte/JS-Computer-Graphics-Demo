@@ -19,7 +19,7 @@ const PutPixel = function(x, y, color) {
     return;
   }
 
-  var offset = 4*x + canvas_pitch*y;
+  let offset = 4*x + canvas_pitch*y;
   canvas_buffer.data[offset++] = color[0];
   canvas_buffer.data[offset++] = color[1];
   canvas_buffer.data[offset++] = color[2];
@@ -65,11 +65,11 @@ function getSpheres () {
 }
 
 // Scene setup.
-var viewport_size = 1;
-var projection_plane_z = 1;
-var camera_position = [0, 0, 0];
-var background_color = [255, 255, 255];
-var spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0]),
+let viewport_size = 1;
+let projection_plane_z = 1;
+let camera_position = [0, 0, 0];
+let background_color = [255, 255, 255];
+let spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0]),
            new Sphere([2, 0, 4], 1, [0, 0, 255]),
            new Sphere([-2, 0, 4], 1.5, [0, 0, 0])];
 
@@ -85,30 +85,30 @@ const CanvasToViewport = function(p2d) {
 // Computes the intersection of a ray and a sphere. Returns the values
 // of t for the intersections.
 const IntersectRaySphere = function(origin, direction, sphere) {
-  var oc = Subtract(origin, sphere.center);
+  let oc = Subtract(origin, sphere.center);
 
-  var k1 = DotProduct(direction, direction);
-  var k2 = 2*DotProduct(oc, direction);
-  var k3 = DotProduct(oc, oc) - sphere.radius*sphere.radius;
+  let k1 = DotProduct(direction, direction);
+  let k2 = 2*DotProduct(oc, direction);
+  let k3 = DotProduct(oc, oc) - sphere.radius*sphere.radius;
 
-  var discriminant = k2*k2 - 4*k1*k3;
+  let discriminant = k2*k2 - 4*k1*k3;
   if (discriminant < 0) {
     return [Infinity, Infinity];
   }
 
-  var t1 = (-k2 + Math.sqrt(discriminant)) / (2*k1);
-  var t2 = (-k2 - Math.sqrt(discriminant)) / (2*k1);
+  let t1 = (-k2 + Math.sqrt(discriminant)) / (2*k1);
+  let t2 = (-k2 - Math.sqrt(discriminant)) / (2*k1);
   return [t1, t2];
 }
 
 
 // Traces a ray against the set of spheres in the scene.
 const TraceRay = function(origin, direction, min_t, max_t) {
-  var closest_t = Infinity;
-  var closest_sphere = null;
+  let closest_t = Infinity;
+  let closest_sphere = null;
   let spheres = getSpheres();
-  for (var i = 0; i < spheres.length; i++) {
-    var ts = IntersectRaySphere(origin, direction, spheres[i]);
+  for (let i = 0; i < spheres.length; i++) {
+    let ts = IntersectRaySphere(origin, direction, spheres[i]);
     if (ts[0] < closest_t && min_t < ts[0] && ts[0] < max_t) {
       closest_t = ts[0];
       closest_sphere = spheres[i];
@@ -133,10 +133,10 @@ const TraceRay = function(origin, direction, min_t, max_t) {
 setInterval(Main, 1);
 
 function Main () {
-  for (var x = -canvas.width/2; x < canvas.width/2; x++) {
-    for (var y = -canvas.height/2; y < canvas.height/2; y++) {
-      var direction = CanvasToViewport([x, y])
-      var color = TraceRay(camera_position, direction, 1, Infinity);
+  for (let x = -canvas.width/2; x < canvas.width/2; x++) {
+    for (let y = -canvas.height/2; y < canvas.height/2; y++) {
+      let direction = CanvasToViewport([x, y])
+      let color = TraceRay(camera_position, direction, 1, Infinity);
       PutPixel(x, y, color);
     }
   }
