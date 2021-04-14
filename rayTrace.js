@@ -130,7 +130,7 @@ const TraceRay = function(origin, direction, min_t, max_t) {
 //
 // Main loop.
 //
-setInterval(Main, 1);
+// setInterval(Main, 1);
 
 function Main () {
   for (let x = -canvas.width/2; x < canvas.width/2; x++) {
@@ -140,10 +140,30 @@ function Main () {
       PutPixel(x, y, color);
     }
   }
-  spheres[0].center[1] += 0.2*(-1);
   UpdateCanvas();
 }
 
+Main();
 
-
+window.addEventListener("keyup", function (e) {
+  if (e.key === "PageUp") {
+    spheres[0].center[2] -= 0.2*(-1);
+    Main();
+  } else if (e.key === "w") {
+    spheres[0].center[1] -= 0.2*(-1);
+    Main();
+  } else if (e.key === "PageDown") {
+    spheres[0].center[2] += 0.2*(-1);
+    Main();
+  } else if (e.key === "s") {
+    spheres[0].center[1] += 0.2*(-1);
+    Main();
+  } else if (e.key === "a") {
+    spheres[0].center[0] += 0.2*(-1);
+    Main();
+  } else if (e.key === "d") {
+    spheres[0].center[0] -= 0.2*(-1);
+    Main();
+  }
+});
 
