@@ -4,14 +4,14 @@
 //  Low-level canvas access.
 // ======================================================================
 
-var canvas = document.getElementById("canvas");
-var canvas_context = canvas.getContext("2d");
-var canvas_buffer = canvas_context.getImageData(0, 0, canvas.width, canvas.height);
-var canvas_pitch = canvas_buffer.width * 4;
+const canvas = document.getElementById("canvas");
+const canvas_context = canvas.getContext("2d");
+const canvas_buffer = canvas_context.getImageData(0, 0, canvas.width, canvas.height);
+const canvas_pitch = canvas_buffer.width * 4;
 
 
 // The PutPixel() function.
-var PutPixel = function(x, y, color) {
+const PutPixel = function(x, y, color) {
   x = canvas.width/2 + x;
   y = canvas.height/2 - y - 1;
 
@@ -28,7 +28,7 @@ var PutPixel = function(x, y, color) {
 
 
 // Displays the contents of the offscreen buffer into the canvas.
-var UpdateCanvas = function() {
+const UpdateCanvas = function() {
   canvas_context.putImageData(canvas_buffer, 0, 0);
 }
 
@@ -38,13 +38,13 @@ var UpdateCanvas = function() {
 // ======================================================================
 
 // Dot product of two 3D vectors.
-var DotProduct = function(v1, v2) {
+const DotProduct = function(v1, v2) {
   return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
 }
 
 
 // Computes v1 - v2.
-var Subtract = function(v1, v2) {
+const Subtract = function(v1, v2) {
   return [v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2]];
 }
 
@@ -54,7 +54,7 @@ var Subtract = function(v1, v2) {
 // ======================================================================
 
 // A Sphere.
-var Sphere = function(center, radius, color) {
+const Sphere = function(center, radius, color) {
   this.center = center;
   this.radius = radius;
   this.color = color;
@@ -75,7 +75,7 @@ var spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0]),
 
 
 // Converts 2D canvas coordinates to 3D viewport coordinates.
-var CanvasToViewport = function(p2d) {
+const CanvasToViewport = function(p2d) {
   return [p2d[0] * viewport_size / canvas.width,
       p2d[1] * viewport_size / canvas.height,
       projection_plane_z];
@@ -84,7 +84,7 @@ var CanvasToViewport = function(p2d) {
 
 // Computes the intersection of a ray and a sphere. Returns the values
 // of t for the intersections.
-var IntersectRaySphere = function(origin, direction, sphere) {
+const IntersectRaySphere = function(origin, direction, sphere) {
   var oc = Subtract(origin, sphere.center);
 
   var k1 = DotProduct(direction, direction);
@@ -103,7 +103,7 @@ var IntersectRaySphere = function(origin, direction, sphere) {
 
 
 // Traces a ray against the set of spheres in the scene.
-var TraceRay = function(origin, direction, min_t, max_t) {
+const TraceRay = function(origin, direction, min_t, max_t) {
   var closest_t = Infinity;
   var closest_sphere = null;
   let spheres = getSpheres();
