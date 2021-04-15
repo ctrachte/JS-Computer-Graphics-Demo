@@ -4,14 +4,14 @@
 //  Low-level canvas access.
 // ======================================================================
 
-var canvas = document.getElementById("canvas");
-var canvas_context = canvas.getContext("2d");
-var canvas_buffer = canvas_context.getImageData(0, 0, canvas.width, canvas.height);
-var canvas_pitch = canvas_buffer.width * 4;
+let canvas = document.getElementById("canvas");
+let canvas_context = canvas.getContext("2d");
+let canvas_buffer = canvas_context.getImageData(0, 0, canvas.width, canvas.height);
+let canvas_pitch = canvas_buffer.width * 4;
 
 
 // The PutPixel() function.
-var PutPixel = function(x, y, color) {
+let PutPixel = function(x, y, color) {
   x = canvas.width/2 + x;
   y = canvas.height/2 - y - 1;
 
@@ -19,7 +19,7 @@ var PutPixel = function(x, y, color) {
     return;
   }
 
-  var offset = 4*x + canvas_pitch*y;
+  let offset = 4*x + canvas_pitch*y;
   canvas_buffer.data[offset++] = color[0];
   canvas_buffer.data[offset++] = color[1];
   canvas_buffer.data[offset++] = color[2];
@@ -28,12 +28,12 @@ var PutPixel = function(x, y, color) {
 
 
 // Displays the contents of the offscreen buffer into the canvas.
-var UpdateCanvas = function() {
+let UpdateCanvas = function() {
   canvas_context.putImageData(canvas_buffer, 0, 0);
 }
 
 
-var ClearAll = function() {
+let ClearAll = function() {
   canvas.width = canvas.width;
 }
 
@@ -43,41 +43,41 @@ var ClearAll = function() {
 // ======================================================================
 
 // Conceptually, an "infinitesimaly small" real number.
-var EPSILON = 0.001;
+let EPSILON = 0.001;
 
 
 // Dot product of two 3D vectors.
-var DotProduct = function(v1, v2) {
+let DotProduct = function(v1, v2) {
   return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
 }
 
 
 // Length of a 3D vector.
-var Length = function(vec) {
+let Length = function(vec) {
   return Math.sqrt(DotProduct(vec, vec));
 }
 
 
 // Computes k * vec.
-var Multiply = function(k, vec) {
+let Multiply = function(k, vec) {
   return [k*vec[0], k*vec[1], k*vec[2]];
 }
 
 
 // Computes v1 + v2.
-var Add = function(v1, v2) {
+let Add = function(v1, v2) {
   return [v1[0] + v2[0], v1[1] + v2[1], v1[2] + v2[2]];
 }
 
 
 // Computes v1 - v2.
-var Subtract = function(v1, v2) {
+let Subtract = function(v1, v2) {
   return [v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2]];
 }
 
 
 // Clamps a color to the canonical color range.
-var Clamp = function(vec) {
+let Clamp = function(vec) {
   return [Math.min(255, Math.max(0, vec[0])),
       Math.min(255, Math.max(0, vec[1])),
       Math.min(255, Math.max(0, vec[2]))];
@@ -85,7 +85,7 @@ var Clamp = function(vec) {
 
 
 // Computes the reflection of v1 respect to v2.
-var ReflectRay = function(v1, v2) {
+let ReflectRay = function(v1, v2) {
   return Subtract(Multiply(2*DotProduct(v1, v2), v2), v1);
 }
 
@@ -95,7 +95,7 @@ var ReflectRay = function(v1, v2) {
 // ======================================================================
 
 // A Sphere.
-var Sphere = function(center, radius, color, specular, reflective) {
+let Sphere = function(center, radius, color, specular, reflective) {
   this.center = center;
   this.radius = radius;
   this.color = color;
@@ -104,7 +104,7 @@ var Sphere = function(center, radius, color, specular, reflective) {
 }
 
 // A Light.
-var Light = function(ltype, intensity, position) {
+let Light = function(ltype, intensity, position) {
   this.ltype = ltype;
   this.intensity = intensity;
   this.position = position;
@@ -116,25 +116,25 @@ Light.DIRECTIONAL = 2;
 
 
 // Scene setup.
-var viewport_size = 1;
-var projection_plane_z = 1;
-var camera_position = [0, 0, 0];
-var background_color = [0, 0, 0];
-var spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0], 500, 0.2),
+let viewport_size = 1;
+let projection_plane_z = 1;
+let camera_position = [0, 0, 0];
+let background_color = [0, 0, 0];
+let spheres = [new Sphere([0, -1, 3], 1, [255, 0, 0], 500, 0.2),
            new Sphere([-2, 0, 4], 1, [0, 255, 0], 10, 0.4),
            new Sphere([2, 0, 4], 1, [0, 0, 255], 500, 0.3),
            new Sphere([0, -5001, 0], 5000, [255, 255, 0], 1000, 0.5)];
 
-var lights = [
+let lights = [
   new Light(Light.AMBIENT, 0.2),
   new Light(Light.POINT, 0.6, [2, 1, 0]),
   new Light(Light.DIRECTIONAL, 0.2, [1, 4, 4])
 ];
 
-var recursion_depth = 3;
+let recursion_depth = 3;
 
-var updateRecursionLimit = function() {
-  var v = document.getElementById("rec-limit").value | 0;
+let updateRecursionLimit = function() {
+  let v = document.getElementById("rec-limit").value | 0;
   if (v < 0) {
     v = 0;
   }
@@ -150,7 +150,7 @@ var updateRecursionLimit = function() {
 }
 
 // Converts 2D canvas coordinates to 3D viewport coordinates.
-var CanvasToViewport = function(p2d) {
+let CanvasToViewport = function(p2d) {
   return [p2d[0] * viewport_size / canvas.width,
       p2d[1] * viewport_size / canvas.height,
       projection_plane_z];
@@ -159,35 +159,35 @@ var CanvasToViewport = function(p2d) {
 
 // Computes the intersection of a ray and a sphere. Returns the values
 // of t for the intersections.
-var IntersectRaySphere = function(origin, direction, sphere) {
-  var oc = Subtract(origin, sphere.center);
+let IntersectRaySphere = function(origin, direction, sphere) {
+  let oc = Subtract(origin, sphere.center);
 
-  var k1 = DotProduct(direction, direction);
-  var k2 = 2*DotProduct(oc, direction);
-  var k3 = DotProduct(oc, oc) - sphere.radius*sphere.radius;
+  let k1 = DotProduct(direction, direction);
+  let k2 = 2*DotProduct(oc, direction);
+  let k3 = DotProduct(oc, oc) - sphere.radius*sphere.radius;
 
-  var discriminant = k2*k2 - 4*k1*k3;
+  let discriminant = k2*k2 - 4*k1*k3;
   if (discriminant < 0) {
     return [Infinity, Infinity];
   }
 
-  var t1 = (-k2 + Math.sqrt(discriminant)) / (2*k1);
-  var t2 = (-k2 - Math.sqrt(discriminant)) / (2*k1);
+  let t1 = (-k2 + Math.sqrt(discriminant)) / (2*k1);
+  let t2 = (-k2 - Math.sqrt(discriminant)) / (2*k1);
   return [t1, t2];
 }
 
 
-var ComputeLighting = function(point, normal, view, specular) {
-  var intensity = 0;
-  var length_n = Length(normal);  // Should be 1.0, but just in case...
-  var length_v = Length(view);
+let ComputeLighting = function(point, normal, view, specular) {
+  let intensity = 0;
+  let length_n = Length(normal);  // Should be 1.0, but just in case...
+  let length_v = Length(view);
 
-  for (var i = 0; i < lights.length; i++) {
-    var light = lights[i];
+  for (let i = 0; i < lights.length; i++) {
+    let light = lights[i];
     if (light.ltype == Light.AMBIENT) {
       intensity += light.intensity;
     } else {
-      var vec_l, t_max;
+      let vec_l, t_max;
       if (light.ltype == Light.POINT) {
     vec_l = Subtract(light.position, point);
     t_max = 1.0;
@@ -197,21 +197,21 @@ var ComputeLighting = function(point, normal, view, specular) {
       }
 
       // Shadow check.
-      var blocker = ClosestIntersection(point, vec_l, EPSILON, t_max);
+      let blocker = ClosestIntersection(point, vec_l, EPSILON, t_max);
       if (blocker) {
     continue;
       }
 
       // Diffuse reflection.
-      var n_dot_l = DotProduct(normal, vec_l);
+      let n_dot_l = DotProduct(normal, vec_l);
       if (n_dot_l > 0) {
     intensity += light.intensity * n_dot_l / (length_n * Length(vec_l));
       }
 
       // Specular reflection.
       if (specular != -1) {
-    var vec_r = ReflectRay(vec_l, normal);
-    var r_dot_v = DotProduct(vec_r, view);
+    let vec_r = ReflectRay(vec_l, normal);
+    let r_dot_v = DotProduct(vec_r, view);
     if (r_dot_v > 0) {
       intensity += light.intensity * Math.pow(r_dot_v / (Length(vec_r) * length_v), specular);
     }
@@ -224,12 +224,12 @@ var ComputeLighting = function(point, normal, view, specular) {
 
 
 // Find the closest intersection between a ray and the spheres in the scene.
-var ClosestIntersection = function(origin, direction, min_t, max_t) {
-  var closest_t = Infinity;
-  var closest_sphere = null;
+let ClosestIntersection = function(origin, direction, min_t, max_t) {
+  let closest_t = Infinity;
+  let closest_sphere = null;
 
-  for (var i = 0; i < spheres.length; i++) {
-    var ts = IntersectRaySphere(origin, direction, spheres[i]);
+  for (let i = 0; i < spheres.length; i++) {
+    let ts = IntersectRaySphere(origin, direction, spheres[i]);
     if (ts[0] < closest_t && min_t < ts[0] && ts[0] < max_t) {
       closest_t = ts[0];
       closest_sphere = spheres[i];
@@ -248,43 +248,43 @@ var ClosestIntersection = function(origin, direction, min_t, max_t) {
 
 
 // Traces a ray against the set of spheres in the scene.
-var TraceRay = function(origin, direction, min_t, max_t, depth) {
-  var intersection = ClosestIntersection(origin, direction, min_t, max_t);
+let TraceRay = function(origin, direction, min_t, max_t, depth) {
+  let intersection = ClosestIntersection(origin, direction, min_t, max_t);
   if (!intersection) {
     return background_color;
   }
 
-  var closest_sphere = intersection[0];
-  var closest_t = intersection[1];
+  let closest_sphere = intersection[0];
+  let closest_t = intersection[1];
 
-  var point = Add(origin, Multiply(closest_t, direction));
-  var normal = Subtract(point, closest_sphere.center);
+  let point = Add(origin, Multiply(closest_t, direction));
+  let normal = Subtract(point, closest_sphere.center);
   normal = Multiply(1.0 / Length(normal), normal);
 
-  var view = Multiply(-1, direction);
-  var lighting = ComputeLighting(point, normal, view, closest_sphere.specular);
-  var local_color = Multiply(lighting, closest_sphere.color);
+  let view = Multiply(-1, direction);
+  let lighting = ComputeLighting(point, normal, view, closest_sphere.specular);
+  let local_color = Multiply(lighting, closest_sphere.color);
 
   if (closest_sphere.reflective <= 0 || depth <= 0) {
     return local_color;
   }
 
-  var reflected_ray = ReflectRay(view, normal);
-  var reflected_color = TraceRay(point, reflected_ray, EPSILON, Infinity, depth - 1);
+  let reflected_ray = ReflectRay(view, normal);
+  let reflected_color = TraceRay(point, reflected_ray, EPSILON, Infinity, depth - 1);
 
   return Add(Multiply(1 - closest_sphere.reflective, local_color),
          Multiply(closest_sphere.reflective, reflected_color));
 }
 
 
-var Render = function() {
+let Render = function() {
   ClearAll();
 
     // Main loop.
-    for (var x = -canvas.width/2; x < canvas.width/2; x++) {
-      for (var y = -canvas.height/2; y < canvas.height/2; y++) {
-        var direction = CanvasToViewport([x, y])
-        var color = TraceRay(camera_position, direction, 1, Infinity, recursion_depth);
+    for (let x = -canvas.width/2; x < canvas.width/2; x++) {
+      for (let y = -canvas.height/2; y < canvas.height/2; y++) {
+        let direction = CanvasToViewport([x, y])
+        let color = TraceRay(camera_position, direction, 1, Infinity, recursion_depth);
         PutPixel(x, y, Clamp(color));
       }
     }
