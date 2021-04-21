@@ -291,7 +291,8 @@ let Render = function () {
 // setInterval(function () {
 //   spheres[0].center[2] -= 0.2 * (-1);
 // }, 500);
-  Render();
+
+Render();
 
 //
 // Main loop, uncomment for automatic movement of sphere
