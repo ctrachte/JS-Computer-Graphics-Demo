@@ -273,9 +273,16 @@ let TraceRay = function (origin, direction, min_t, max_t, depth) {
     Multiply(closest_sphere.reflective, reflected_color));
 }
 
+let workers = [];
+workers.push(new Worker('webWorkers.js')
+);
+workers[0].onmessage = function(e) {
+  console.log('Message received from worker', e.data);
+}
+
 let Render = function () {
   ClearAll();
-
+  workers[0].postMessage([1, 2]);
   // Main loop.
   for (let x = -canvas.width / 2; x < canvas.width / 2; x++) {
     for (let y = -canvas.height / 2; y < canvas.height / 2; y++) {
@@ -284,7 +291,7 @@ let Render = function () {
       PutPixel(x, y, Clamp(color));
     }
   }
-
+  console.log(workers)
   UpdateCanvas();
 }
 
