@@ -219,6 +219,13 @@ let ComputeLighting = function (point, normal, view, specular) {
   return intensity;
 }
 
+// let workers = [];
+// workers.push(new Worker('webWorkers.js')
+// );
+// workers[0].onmessage = function(e) {
+//   console.log('Message received from worker', e.data);
+// }
+
 
 // Find the closest intersection between a ray and the spheres in the scene.
 let ClosestIntersection = function (origin, direction, min_t, max_t) {
@@ -226,6 +233,7 @@ let ClosestIntersection = function (origin, direction, min_t, max_t) {
   let closest_sphere = null;
 
   for (let i = 0; i < spheres.length; i++) {
+    // workers[0].postMessage([origin, direction, spheres[i]]);
     let ts = IntersectRaySphere(origin, direction, spheres[i]);
     if (ts[0] < closest_t && min_t < ts[0] && ts[0] < max_t) {
       closest_t = ts[0];
@@ -273,16 +281,9 @@ let TraceRay = function (origin, direction, min_t, max_t, depth) {
     Multiply(closest_sphere.reflective, reflected_color));
 }
 
-let workers = [];
-workers.push(new Worker('webWorkers.js')
-);
-workers[0].onmessage = function(e) {
-  console.log('Message received from worker', e.data);
-}
 
 let Render = function () {
   ClearAll();
-  workers[0].postMessage([1, 2]);
   // Main loop.
   for (let x = -canvas.width / 2; x < canvas.width / 2; x++) {
     for (let y = -canvas.height / 2; y < canvas.height / 2; y++) {
